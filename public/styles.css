@@ -1,0 +1,135 @@
+body {
+    background-color: #121212;
+    color: white;
+    font-family: serif, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+button {
+    font-size: 16px;
+    background-color: #222222;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    border-style: groove;
+    border-color: black;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+.gpu-container {
+    max-width: 1100px;
+    min-width: 600px;
+    margin: 0 auto 30px auto; /* Center the container horizontally */
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 15px;
+    background-color: #1e1e1e;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the content inside */
+}
+
+/* Style for the GPU name header */ 
+.gpu-name-header-nvidia, 
+.gpu-name-header-amd, 
+.gpu-name-header-intel, 
+.gpu-name-header {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    width: 100%;
+    display: block;
+}
+
+.gpu-name-header-nvidia {
+    color: #76b900;
+}
+
+.gpu-name-header-amd {
+    color: red;
+}
+
+.gpu-name-header-intel {
+    color: #0068B5;
+}
+
+.table-wrapper {
+    display: flex;
+    gap: 20px; /* Space between tables */
+    justify-content: center; /* Center the tables within the container */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    width: 100%;
+    border: 1px solid gray;
+    border-style: groove;
+}
+
+th, td {
+    width: 200px;
+    padding: 10px;
+    text-align: center;
+}
+
+thead {
+    background-color: #141414;
+}
+
+th {
+    font-weight: bold;
+}
+
+.gpu-compare-header,
+.gpu-compare-header-amd,
+.gpu-compare-header-intel,
+.gpu-compare-header-nvidia {
+    background-color: #050505;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.gpu-compare-header-nvidia {
+    color: #76b900;
+}
+
+.gpu-compare-header-amd {
+    color: red;
+}
+
+.gpu-compare-header-intel {
+    color: #0068B5;
+}
+
+.compare-specs-container {
+    width: 600px;
+    margin: 0 auto 30px auto; /* Center the container horizontally */
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 15px;
+    background-color: #1e1e1e;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center the content inside */
+    font-size: large;
+}
+
+.compare-specs-table-headers {
+    background-color: #050505;
+}
