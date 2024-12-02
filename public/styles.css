@@ -134,18 +134,14 @@ th {
 .compare-specs-table-headers {
     background-color: #050505;
 }
+  
+.compare-specs-table-gpu-column {
+    width: 30%;
+}
 
 /* Adjust the width of the 'Difference' column */
 .compare-specs-table-difference-column {
     width: 10%;
-}
-
-.compare-specs-table .name-column {
-    width: 30%;
-}
-  
-.compare-specs-table .gpu-column {
-    width: 30%;
 }
 
 
@@ -182,5 +178,16 @@ th {
 
     .compare-specs-container {
         max-width: 600px;
+        overflow-x: auto;
+        padding-left: 2rem;
+        padding-right: 0;
     }
+
+    .compare-specs-table {
+        width: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+
 }
