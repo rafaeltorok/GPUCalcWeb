@@ -128,11 +128,26 @@ th {
     flex-wrap: wrap;
     justify-content: center; /* Center the content inside */
     font-size: large;
+    table-layout: fixed;
 }
 
 .compare-specs-table-headers {
     background-color: #050505;
 }
+
+/* Adjust the width of the 'Difference' column */
+.compare-specs-table-difference-column {
+    width: 10%;
+}
+
+.compare-specs-table .name-column {
+    width: 30%;
+}
+  
+.compare-specs-table .gpu-column {
+    width: 30%;
+}
+
 
 @media only screen and (hover: none) and (pointer: coarse) and (orientation: portrait){
     #content, 
