@@ -436,10 +436,10 @@ function createPerformanceTable(gpu, coreClock, memClock) {
     const header = createTableHeader("THEORETICAL PERFORMANCE");
     const body = document.createElement("tbody");
     body.innerHTML = `
-        <tr><td>FP32 (float):</td><td>${gpu.fp32(gpu, coreClock)}</td></tr>
-        <tr><td>Texture Rate:</td><td>${gpu.texRate(gpu, coreClock)} GTexel/s</td></tr>
-        <tr><td>Pixel Rate:</td><td>${gpu.pixRate(gpu, coreClock)} GPixel/s</td></tr>
-        <tr><td>Bandwidth:</td><td>${gpu.bandwidth(gpu, memClock)} GB/s</td></tr>
+        <tr><td>FP32 (float):</td><td>${gpu.calculateFP32(coreClock)}</td></tr>
+        <tr><td>Texture Rate:</td><td>${gpu.calculateTextureRate(coreClock)} GTexel/s</td></tr>
+        <tr><td>Pixel Rate:</td><td>${gpu.calculatePixelRate(coreClock)} GPixel/s</td></tr>
+        <tr><td>Bandwidth:</td><td>${gpu.calculateBandwidth(memClock)} GB/s</td></tr>
     `;
 
     table.appendChild(header);
@@ -464,7 +464,8 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
     const gpuContainer = document.createElement("div");
     gpuContainer.className = "compare-specs-container";
 
-    let firstGPUNameHeaderClass = "";
+    // Sets the font color to the name header of the GPU in the left side of the comparison
+    let firstGPUNameHeaderClass;
     if (firstGPU.getManufacturer().toLowerCase().trim() == "nvidia") {
         firstGPUNameHeaderClass = "gpu-compare-header-nvidia";
     } else if (firstGPU.getManufacturer().toLowerCase().trim() == "amd") {
@@ -475,7 +476,8 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
         firstGPUNameHeaderClass = "gpu-compare-header";
     }
 
-    let secondGPUNameHeaderClass = "";
+    // Sets the font color to the name header of the GPU in the right side of the comparison
+    let secondGPUNameHeaderClass;
     if (secondGPU.getManufacturer().toLowerCase().trim() == "nvidia") {
         secondGPUNameHeaderClass = "gpu-compare-header-nvidia";
     } else if (secondGPU.getManufacturer().toLowerCase().trim() == "amd") {
@@ -488,9 +490,11 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
 
     const table = document.createElement("table");
 
+    // Creates the first line in the table containing both GPU names and the % difference
     const compareSpecsHeader = document.createElement("tr");
-    compareSpecsHeader.classList.add("compareSpecsHeader");
+    compareSpecsHeader.classList.add("compare-specs-table-headers");
 
+    // Creates each one of the main headers for the table
     const gpuNameHeader = document.createElement("th");
     gpuNameHeader.textContent = "Name";
     gpuNameHeader.classList.add("compare-specs-table-headers");
@@ -500,16 +504,21 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
     const secondGPUName = document.createElement("td");
     secondGPUName.textContent = secondGPU.getName();
     secondGPUName.classList.add(secondGPUNameHeaderClass);
+    const percentageDifferenceHeader = document.createElement("td");
+    percentageDifferenceHeader.textContent = "Difference (in %)";
+    percentageDifferenceHeader.className = "compare-specs-table-difference-column";
 
     compareSpecsHeader.appendChild(gpuNameHeader);
     compareSpecsHeader.appendChild(firstGPUName);
     compareSpecsHeader.appendChild(secondGPUName);
+    compareSpecsHeader.appendChild(percentageDifferenceHeader);
 
+    // The graphics card specifications first division of the table
     const graphicsCardRow = document.createElement("tr");
     const graphicsCardHeader = document.createElement("th");
     graphicsCardHeader.textContent = "GRAPHICS CARD";
     graphicsCardHeader.classList.add("compare-specs-table-headers");
-    graphicsCardHeader.colSpan = 3;
+    graphicsCardHeader.colSpan = 4;
     graphicsCardRow.appendChild(graphicsCardHeader);
 
     const coresRow = document.createElement("tr");
@@ -517,66 +526,96 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
     coresHeader.textContent = "Cores";
     const firstGPUCores = document.createElement("td");
     firstGPUCores.textContent = firstGPU.getCores();
+    firstGPUCores.className = "gpu-column";
     const secondGPUCores = document.createElement("td");
     secondGPUCores.textContent = secondGPU.getCores();
+    secondGPUCores.className = "gpu-column";
+    const coresDifference = document.createElement("td");
+    coresDifference.className = "compare-specs-table-difference-column";
+    coresDifference.textContent = getPercentageDifference(firstGPU.getCores(), secondGPU.getCores());
 
     coresRow.appendChild(coresHeader);
     coresRow.appendChild(firstGPUCores);
     coresRow.appendChild(secondGPUCores);
+    coresRow.appendChild(coresDifference)
 
     const tmusRow = document.createElement("tr");
     const tmusHeader = document.createElement("th");
     tmusHeader.textContent = "TMUs";
     const firstGPUTmus = document.createElement("td");
     firstGPUTmus.textContent = firstGPU.getTmus();
+    firstGPUTmus.className = "gpu-column";
     const secondGPUTmus = document.createElement("td");
     secondGPUTmus.textContent = secondGPU.getTmus();
+    secondGPUTmus.className = "gpu-column";
+    const tmusDifference = document.createElement("td");
+    tmusDifference.className = "compare-specs-table-difference-column";
+    tmusDifference.textContent = getPercentageDifference(firstGPU.getTmus(), secondGPU.getTmus());
 
     tmusRow.appendChild(tmusHeader);
     tmusRow.appendChild(firstGPUTmus);
     tmusRow.appendChild(secondGPUTmus);
+    tmusRow.appendChild(tmusDifference);
 
     const ropsRow = document.createElement("tr");
     const ropsHeader = document.createElement("th");
     ropsHeader.textContent = "ROPs";
     const firstGPURops = document.createElement("td");
     firstGPURops.textContent = firstGPU.getRops();
+    firstGPURops.className = "gpu-column";
     const secondGPURops = document.createElement("td");
     secondGPURops.textContent = secondGPU.getRops();
+    secondGPURops.className = "gpu-column";
+    const ropsDifference = document.createElement("td");
+    ropsDifference.className = "compare-specs-table-difference-column";
+    ropsDifference.textContent = getPercentageDifference(firstGPU.getRops(), secondGPU.getRops());
 
     ropsRow.appendChild(ropsHeader);
     ropsRow.appendChild(firstGPURops);
     ropsRow.appendChild(secondGPURops);
+    ropsRow.appendChild(ropsDifference);
 
     const vramRow = document.createElement("tr");
     const vramHeader = document.createElement("th");
     vramHeader.textContent = "VRAM";
     const firstGPUVram = document.createElement("td");
     firstGPUVram.textContent = firstGPU.getVram() + "GB " + firstGPU.getMemType();
+    firstGPUVram.className = "gpu-column";
     const secondGPUVram = document.createElement("td");
     secondGPUVram.textContent = secondGPU.getVram() + "GB " + secondGPU.getMemType();
+    secondGPUVram.className = "gpu-column";
+    const vramDifference = document.createElement("td");
+    vramDifference.className = "compare-specs-table-difference-column";
+    vramDifference.textContent = getPercentageDifference(firstGPU.getVram(), secondGPU.getVram());
 
     vramRow.appendChild(vramHeader);
     vramRow.appendChild(firstGPUVram);
     vramRow.appendChild(secondGPUVram);
+    vramRow.appendChild(vramDifference);
 
     const busRow = document.createElement("tr");
     const busHeader = document.createElement("th");
     busHeader.textContent = "Bus Width";
     const firstGPUBus = document.createElement("td");
     firstGPUBus.textContent = firstGPU.getBus() + " bit";
+    firstGPUBus.className = "gpu-column";
     const secondGPUBus = document.createElement("td");
     secondGPUBus.textContent = secondGPU.getBus() + " bit";
+    secondGPUBus.className = "gpu-column";
+    const busDifference = document.createElement("td");
+    busDifference.className = "compare-specs-table-difference-column";
+    busDifference.textContent = getPercentageDifference(firstGPU.getBus(), secondGPU.getBus());
 
     busRow.appendChild(busHeader);
     busRow.appendChild(firstGPUBus);
     busRow.appendChild(secondGPUBus);
+    busRow.appendChild(busDifference);
 
     const clockSpeedsRow = document.createElement("tr");
     const clockSpeedsHeader = document.createElement("th");
     clockSpeedsHeader.textContent = "CLOCK SPEEDS";
     clockSpeedsHeader.classList.add("compare-specs-table-headers");
-    clockSpeedsHeader.colSpan = 3;
+    clockSpeedsHeader.colSpan = 4;
     clockSpeedsRow.appendChild(clockSpeedsHeader);
 
     const baseClockRow = document.createElement("tr");
@@ -584,91 +623,139 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
     baseClockHeader.textContent = "Base Clock";
     const firstGPUBase = document.createElement("td");
     firstGPUBase.textContent = firstGPU.getBaseClock() + " MHz";
+    firstGPUBase.className = "gpu-column";
     const secondGPUBase = document.createElement("td");
     secondGPUBase.textContent = secondGPU.getBaseClock() + " MHz";
+    secondGPUBase.className = "gpu-column";
+    const baseClockDifference = document.createElement("td");
+    baseClockDifference.className = "compare-specs-table-difference-column";
+    baseClockDifference.textContent = getPercentageDifference(firstGPU.getBaseClock(), secondGPU.getBoostClock());
 
     baseClockRow.appendChild(baseClockHeader);
     baseClockRow.appendChild(firstGPUBase);
     baseClockRow.appendChild(secondGPUBase);
+    baseClockRow.appendChild(baseClockDifference);
 
     const boostClockRow = document.createElement("tr");
     const boostClockHeader = document.createElement("th");
     boostClockHeader.textContent = "Boost Clock";
     const firstGPUBoost = document.createElement("td");
     firstGPUBoost.textContent = firstGPU.getBoostClock() + " MHz";
+    firstGPUBoost.className = "gpu-column";
     const secondGPUBoost = document.createElement("td");
     secondGPUBoost.textContent = secondGPU.getBoostClock() + " MHz";
+    secondGPUBoost.className = "gpu-column";
+    const boostClockDifference = document.createElement("td");
+    boostClockDifference.className = "compare-specs-table-difference-column";
+    boostClockDifference.textContent = getPercentageDifference(firstGPU.getBoostClock(), secondGPU.getBoostClock());
 
     boostClockRow.appendChild(boostClockHeader);
     boostClockRow.appendChild(firstGPUBoost);
     boostClockRow.appendChild(secondGPUBoost);
+    boostClockRow.appendChild(boostClockDifference);
 
     const memClockRow = document.createElement("tr");
     const memClockHeader = document.createElement("th");
     memClockHeader.textContent = "Mem Clock";
     const firstGPUMemClock = document.createElement("td");
     firstGPUMemClock.textContent = firstGPU.getMemClock() + " Gbps effective";
+    firstGPUMemClock.className = "gpu-column";
     const secondGPUMemClock = document.createElement("td");
     secondGPUMemClock.textContent = secondGPU.getMemClock() + " Gbps effective";
-
+    secondGPUMemClock.className = "gpu-column";
+    const memClockDifference = document.createElement("td");
+    memClockDifference.className = "compare-specs-table-difference-column";
+    memClockDifference.textContent = getPercentageDifference(firstGPU.getMemClock(), secondGPU.getMemClock());
+    
     memClockRow.appendChild(memClockHeader);
     memClockRow.appendChild(firstGPUMemClock);
     memClockRow.appendChild(secondGPUMemClock);
+    memClockRow.appendChild(memClockDifference);
 
     const performanceRow = document.createElement("tr");
     const performanceHeader = document.createElement("th");
     performanceHeader.textContent = "THEORETICAL PERFORMANCE";
     performanceHeader.classList.add("compare-specs-table-headers");
-    performanceHeader.colSpan = 3;
+    performanceHeader.colSpan = 4;
     performanceRow.appendChild(performanceHeader);
 
     const fp32Row = document.createElement("tr");
     const fp32Header = document.createElement("th");
     fp32Header.textContent = "FP32 (float)";
     const firstGPUFP32 = document.createElement("td");
-    firstGPUFP32.textContent = firstGPU.fp32(firstGPU, firstGPU.getBoostClock());
+    firstGPUFP32.textContent = firstGPU.calculateFP32(firstGPU.getBoostClock());
+    firstGPUFP32.className = "gpu-column";
     const secondGPUFP32 = document.createElement("td");
-    secondGPUFP32.textContent = secondGPU.fp32(secondGPU, secondGPU.getBoostClock());
+    secondGPUFP32.textContent = secondGPU.calculateFP32(secondGPU.getBoostClock());
+    secondGPUFP32.className = "gpu-column";
+    const fp32Difference = document.createElement("td");
+    fp32Difference.className = "compare-specs-table-difference-column";
+    fp32Difference.textContent = getFP32PercentageDifference(firstGPU, secondGPU);
 
     fp32Row.appendChild(fp32Header);
     fp32Row.appendChild(firstGPUFP32);
     fp32Row.appendChild(secondGPUFP32);
+    fp32Row.appendChild(fp32Difference);
 
     const textureRateRow = document.createElement("tr");
     const textureRateHeader = document.createElement("th");
     textureRateHeader.textContent = "Texture Rate";
     const firstGPUTexRate = document.createElement("td");
-    firstGPUTexRate.textContent = firstGPU.texRate(firstGPU, firstGPU.getBoostClock()) + " GTexel/s";
+    firstGPUTexRate.textContent = firstGPU.calculateTextureRate(firstGPU.getBoostClock()) + " GTexel/s";
+    firstGPUTexRate.className = "gpu-column";
     const secondGPUTexRate = document.createElement("td");
-    secondGPUTexRate.textContent = secondGPU.texRate(secondGPU, secondGPU.getBoostClock()) + " GTexel/s";
+    secondGPUTexRate.textContent = secondGPU.calculateTextureRate(secondGPU.getBoostClock()) + " GTexel/s";
+    secondGPUTexRate.className = "gpu-column";
+    const textureRateDifference = document.createElement("td");
+    textureRateDifference.className = "compare-specs-table-difference-column";
+    textureRateDifference.textContent = getPercentageDifference(
+        firstGPU.calculateTextureRate(firstGPU.getBoostClock()), 
+        secondGPU.calculateTextureRate(secondGPU.getBoostClock()));
 
     textureRateRow.appendChild(textureRateHeader);
     textureRateRow.appendChild(firstGPUTexRate);
     textureRateRow.appendChild(secondGPUTexRate);
+    textureRateRow.appendChild(textureRateDifference);
 
     const pixelRateRow = document.createElement("tr");
     const pixelRateHeader = document.createElement("th");
     pixelRateHeader.textContent = "Pixel Rate";
     const firstGPUPixRate = document.createElement("td");
-    firstGPUPixRate.textContent = firstGPU.pixRate(firstGPU, firstGPU.getBoostClock()) + " GPixel/s";
+    firstGPUPixRate.textContent = firstGPU.calculatePixelRate(firstGPU.getBoostClock()) + " GPixel/s";
+    firstGPUPixRate.className = "gpu-column";
     const secondGPUPixRate = document.createElement("td");
-    secondGPUPixRate.textContent = secondGPU.pixRate(secondGPU, secondGPU.getBoostClock()) + " GPixel/s";
+    secondGPUPixRate.textContent = secondGPU.calculatePixelRate(secondGPU.getBoostClock()) + " GPixel/s";
+    secondGPUPixRate.className = "gpu-column";
+    const pixelRateDifference = document.createElement("td");
+    pixelRateDifference.className = "compare-specs-table-difference-column";
+    pixelRateDifference.textContent = getPercentageDifference(
+        firstGPU.calculatePixelRate(firstGPU.getBoostClock()), 
+        secondGPU.calculatePixelRate(secondGPU.getBoostClock()));
 
     pixelRateRow.appendChild(pixelRateHeader);
     pixelRateRow.appendChild(firstGPUPixRate);
     pixelRateRow.appendChild(secondGPUPixRate);
+    pixelRateRow.appendChild(pixelRateDifference);
 
     const bandwidthRow = document.createElement("tr");
     const bandwidthHeader = document.createElement("th");
     bandwidthHeader.textContent = "Bandwidth";
     const firstGPUBandwidth = document.createElement("td");
-    firstGPUBandwidth.textContent = firstGPU.bandwidth(firstGPU, firstGPU.getMemClock()) + " GB/s";
+    firstGPUBandwidth.textContent = firstGPU.calculateBandwidth(firstGPU.getMemClock()) + " GB/s";
+    firstGPUBandwidth.className = "gpu-column";
     const secondGPUBandwidth = document.createElement("td");
-    secondGPUBandwidth.textContent = secondGPU.bandwidth(secondGPU, secondGPU.getMemClock()) + " GB/s";
+    secondGPUBandwidth.textContent = secondGPU.calculateBandwidth(secondGPU.getMemClock()) + " GB/s";
+    secondGPUBandwidth.className = "gpu-column";
+    const bandwidthDifference = document.createElement("td");
+    bandwidthDifference.className = "compare-specs-table-difference-column";
+    bandwidthDifference.textContent = getPercentageDifference(
+        firstGPU.calculateBandwidth(firstGPU.getMemClock()), 
+        secondGPU.calculateBandwidth(secondGPU.getMemClock()));
 
     bandwidthRow.appendChild(bandwidthHeader);
     bandwidthRow.appendChild(firstGPUBandwidth);
     bandwidthRow.appendChild(secondGPUBandwidth);
+    bandwidthRow.appendChild(bandwidthDifference);
 
     table.appendChild(compareSpecsHeader);
     table.appendChild(graphicsCardRow);
@@ -689,6 +776,27 @@ function createCompareSpecsContainer(firstGPU, secondGPU) {
     gpuContainer.appendChild(table);
 
     return gpuContainer;
+}
+
+// Support method for the createCompareSpecsContainer() function
+function getPercentageDifference(firstGPUValue, secondGPUValue) {
+    const percentageDifference = ((firstGPUValue / secondGPUValue) * 100) - 100;
+    return percentageDifference > 0 ? `+${percentageDifference.toFixed()}%` : `${percentageDifference.toFixed()}%`;
+}
+
+// Support method for the createCompareSpecsContainer() function
+function getFP32PercentageDifference(firstGPU, secondGPU) {
+    const getFP32 = (gpu) => {
+        return (gpu.getName().toLowerCase().includes("rx 7")) ? 
+            (gpu.getCores() * gpu.getBoostClock() * 4) / 1000000 : 
+            (gpu.getCores() * gpu.getBoostClock() * 2) / 1000000;
+    };
+
+    const firstFP32Performance = getFP32(firstGPU);
+    const secondFP32Performance = getFP32(secondGPU);
+    
+    const percentageDifference = ((firstFP32Performance / secondFP32Performance) * 100) - 100;
+    return percentageDifference > 0 ? `+${percentageDifference.toFixed()}%` : `${percentageDifference.toFixed()}%`;
 }
 
 function main() {

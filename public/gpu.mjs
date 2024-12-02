@@ -75,29 +75,25 @@ export class GPU {
         return this.#memclock
     }
 
-    fp32(gpu, clock) {
-        let floatingPointsPerformance = 0;
-        if (gpu.getName().toLowerCase().includes("rx 7")) {
-            floatingPointsPerformance = ((gpu.getCores() * clock * 4) / 1000000).toFixed(2);
+    calculateFP32(coreClock) {
+        let fp32Performance = 0;
+        if (this.getName().toLowerCase().includes("rx 7")) {
+            fp32Performance = ((this.getCores() * coreClock * 4) / 1000000).toFixed(2);
         } else {
-            floatingPointsPerformance = ((gpu.getCores() * clock * 2) / 1000000).toFixed(2);
+            fp32Performance = ((this.getCores() * coreClock * 2) / 1000000).toFixed(2);
         }
-
-        if (floatingPointsPerformance < 1) {
-            return (floatingPointsPerformance * 1000) + " GFLOPS";
-        }
-        return floatingPointsPerformance + " TFLOPS";
+        return (fp32Performance < 1) ? (fp32Performance * 1000) + " GFLOPS" : fp32Performance + " TFLOPS";
     }
 
-    texRate(gpu, clock) {
-        return ((gpu.getTmus() * clock) / 1000).toFixed(2);
+    calculateTextureRate(coreClock) {
+        return ((this.getTmus() * coreClock) / 1000).toFixed(2);
     }
 
-    pixRate(gpu, clock) {
-        return ((gpu.getRops() * clock) / 1000).toFixed(2);
+    calculatePixelRate(coreClock) {
+        return ((this.getRops() * coreClock) / 1000).toFixed(2);
     }
 
-    bandwidth(gpu, memClock) {
-        return ((gpu.getBus() * memClock) / 8).toFixed(2);
+    calculateBandwidth(memClock) {
+        return ((this.getBus() * memClock) / 8).toFixed(2);
     }
 }
