@@ -25,6 +25,10 @@ button:hover {
     background-color: gray;
 }
 
+input {
+    padding: 0.5rem;
+}
+
 .gpu-container {
     max-width: 1100px;
     min-width: 600px;
