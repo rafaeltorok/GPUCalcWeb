@@ -141,6 +141,7 @@ th {
   
 .compare-specs-table-gpu-column {
     width: 30%;
+    background-color: #303030;
 }
 
 /* Adjust the width of the 'Difference' column */
