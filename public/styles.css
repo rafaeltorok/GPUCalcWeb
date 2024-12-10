@@ -152,7 +152,7 @@ th {
 @media only screen and (hover: none) and (pointer: coarse) and (orientation: portrait){
     #content, 
     .menu, 
-    #dataDisplay,
+    #data-display,
     table,
     th,
     td,
