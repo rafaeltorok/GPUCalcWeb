@@ -35,8 +35,8 @@ compareSpecsButton.addEventListener('click', showCompareSpecs);
 async function showAddGPU() {
     const gpu = {
         manufacturer: prompt('Enter Manufacturer'),
-        gpuline: prompt('Enter Line'),
-        gpuname: prompt('Enter Name'),
+        line: prompt('Enter Line'),
+        model: prompt('Enter Name'),
         cores: parseInt(prompt('Enter Cores')),
         tmus: parseInt(prompt('Enter TMUs')),
         rops: parseInt(prompt('Enter ROPs')),
@@ -51,8 +51,8 @@ async function showAddGPU() {
     const gpuList = getGPUList();
     gpuList.push(new GPU(
         gpu.manufacturer,
-        gpu.gpuline,
-        gpu.gpuname,
+        gpu.line,
+        gpu.model,
         gpu.cores,
         gpu.tmus,
         gpu.rops,

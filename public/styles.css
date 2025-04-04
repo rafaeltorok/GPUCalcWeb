@@ -43,10 +43,10 @@ input {
 }
 
 /* Style for the GPU name header */ 
-.gpu-name-header-nvidia, 
-.gpu-name-header-amd, 
-.gpu-name-header-intel, 
-.gpu-name-header {
+.model-header-nvidia, 
+.model-header-amd, 
+.model-header-intel, 
+.model-header {
     text-align: center;
     font-size: 30px;
     margin-bottom: 15px;
@@ -55,15 +55,15 @@ input {
     display: block;
 }
 
-.gpu-name-header-nvidia {
+.model-header-nvidia {
     color: #76b900;
 }
 
-.gpu-name-header-amd {
+.model-header-amd {
     color: red;
 }
 
-.gpu-name-header-intel {
+.model-header-intel {
     color: #0068B5;
 }
 

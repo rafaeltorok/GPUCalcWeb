@@ -11,8 +11,8 @@ export async function getData() {
     for (const item of data) {
         gpuList.push(new GPU(
             item['manufacturer'], 
-            item['gpuline'], 
-            item['gpuname'],
+            item['line'], 
+            item['model'],
             item['cores'],
             item['tmus'],
             item['rops'],
@@ -29,7 +29,7 @@ export async function getData() {
 
 // Fetches a GPU object from the gpuList Array
 export function getGPUFromDatabase(searchInput) {
-    const gpu = gpuList.find(gpu => gpu.getName().toLowerCase().trim() === searchInput.toLowerCase().trim());
+    const gpu = gpuList.find(gpu => gpu.getModel().toLowerCase().trim() === searchInput.toLowerCase().trim());
     return gpu;
 }
 
@@ -51,8 +51,8 @@ export function formatGpuListIntoJsonString() {
         dataList.push(
             {
                 manufacturer: gpu.getManufacturer(),
-                gpuline: gpu.getLine(),
-                gpuname: gpu.getName(),
+                line: gpu.getLine(),
+                model: gpu.getModel(),
                 cores: gpu.getCores(),
                 tmus: gpu.getTmus(),
                 rops: gpu.getRops(),

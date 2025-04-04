@@ -9,7 +9,7 @@ export async function removeGPU() {
     let wasRemoved = false;
 
     const gpuList = getGPUList();
-    const index = gpuList.findIndex(gpu => gpu.getName().toLowerCase() === gpuToRemove);
+    const index = gpuList.findIndex(gpu => gpu.getModel().toLowerCase() === gpuToRemove);
 
     if (index !== -1) {
         gpuList.splice(index, 1);

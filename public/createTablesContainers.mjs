@@ -2,17 +2,26 @@ export function createGPUContainer(gpu, coreClock, memClock) {
     const gpuContainer = document.createElement("div");
     gpuContainer.className = "gpu-container";
 
-    const gpuNameHeader = document.createElement("h2");
-    if (gpu.getManufacturer().toLowerCase().trim() == "nvidia") {
-        gpuNameHeader.className = "gpu-name-header-nvidia";
-    } else if (gpu.getManufacturer().toLowerCase().trim() == "amd") {
-        gpuNameHeader.className = "gpu-name-header-amd";
-    } else if (gpu.getManufacturer().toLowerCase().trim() == "intel") {
-        gpuNameHeader.className = "gpu-name-header-intel";
+    const gpuModelHeader = document.createElement("h2");
+    if (
+        gpu.getManufacturer().toLowerCase().trim() == "nvidia" ||
+        gpu.getLine().toLowerCase().trim() == "geforce"
+    ) {
+        gpuModelHeader.className = "model-header-nvidia";
+    } else if (
+        gpu.getManufacturer().toLowerCase().trim() == "amd" ||
+        gpu.getLine().toLowerCase().trim() == "radeon"
+    ) {
+        gpuModelHeader.className = "model-header-amd";
+    } else if (
+        gpu.getManufacturer().toLowerCase().trim() == "intel" ||
+        gpu.getLine().toLowerCase().trim() == "arc"
+    ) {
+        gpuModelHeader.className = "model-header-intel";
     } else {
-        gpuNameHeader.className = "gpu-name-header";
+        gpuModelHeader.className = "model-header";
     }
-    gpuNameHeader.textContent = gpu.getManufacturer() + " " + gpu.getLine() + " " + gpu.getName();
+    gpuModelHeader.textContent = gpu.getManufacturer() + " " + gpu.getLine() + " " + gpu.getModel();
 
     const tableWrapper = document.createElement("div");
     tableWrapper.className = "table-wrapper";
@@ -22,7 +31,7 @@ export function createGPUContainer(gpu, coreClock, memClock) {
     tableWrapper.appendChild(createClockSpeedsTable(gpu, coreClock, memClock));
     tableWrapper.appendChild(createPerformanceTable(gpu, coreClock, memClock));
 
-    gpuContainer.appendChild(gpuNameHeader);
+    gpuContainer.appendChild(gpuModelHeader);
     gpuContainer.appendChild(tableWrapper);
 
     return gpuContainer;

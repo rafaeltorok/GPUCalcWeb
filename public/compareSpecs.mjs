@@ -28,27 +28,45 @@ export function createCompareSpecsContainer(firstGPU, secondGPU) {
     gpuContainer.className = "compare-specs-container";
 
     // Sets the font color to the name header of the GPU in the left side of the comparison
-    let firstGPUNameHeaderClass;
-    if (firstGPU.getManufacturer().toLowerCase().trim() == "nvidia") {
-        firstGPUNameHeaderClass = "gpu-compare-header-nvidia";
-    } else if (firstGPU.getManufacturer().toLowerCase().trim() == "amd") {
-        firstGPUNameHeaderClass = "gpu-compare-header-amd";
-    } else if (firstGPU.getManufacturer().toLowerCase().trim() == "intel") {
-        firstGPUNameHeaderClass = "gpu-compare-header-intel";
+    let firstGpuModelHeaderClass;
+    if (
+        firstGPU.getManufacturer().toLowerCase().trim() === "nvidia" ||
+        firstGPU.getLine().toLowerCase().trim() === "geforce"
+    ) {
+        firstGpuModelHeaderClass = "gpu-compare-header-nvidia";
+    } else if (
+        firstGPU.getManufacturer().toLowerCase().trim() == "amd" ||
+        firstGPU.getLine().toLowerCase().trim() === "radeon"
+    ) {
+        firstGpuModelHeaderClass = "gpu-compare-header-amd";
+    } else if (
+        firstGPU.getManufacturer().toLowerCase().trim() == "intel" ||
+        firstGPU.getLine().toLowerCase().trim() === "arc"
+    ) {
+        firstGpuModelHeaderClass = "gpu-compare-header-intel";
     } else {
-        firstGPUNameHeaderClass = "gpu-compare-header";
+        firstGpuModelHeaderClass = "gpu-compare-header";
     }
 
     // Sets the font color to the name header of the GPU in the right side of the comparison
-    let secondGPUNameHeaderClass;
-    if (secondGPU.getManufacturer().toLowerCase().trim() == "nvidia") {
-        secondGPUNameHeaderClass = "gpu-compare-header-nvidia";
-    } else if (secondGPU.getManufacturer().toLowerCase().trim() == "amd") {
-        secondGPUNameHeaderClass = "gpu-compare-header-amd";
-    } else if (secondGPU.getManufacturer().toLowerCase().trim() == "intel") {
-        secondGPUNameHeaderClass = "gpu-compare-header-intel";
+    let secondGpuModelHeaderClass;
+    if (
+        secondGPU.getManufacturer().toLowerCase().trim() == "nvidia" ||
+        secondGPU.getLine().toLowerCase().trim() === "geforce"
+    ) {
+        secondGpuModelHeaderClass = "gpu-compare-header-nvidia";
+    } else if (
+        secondGPU.getManufacturer().toLowerCase().trim() == "amd" ||
+        secondGPU.getLine().toLowerCase().trim() === "radeon"
+    ) {
+        secondGpuModelHeaderClass = "gpu-compare-header-amd";
+    } else if (
+        secondGPU.getManufacturer().toLowerCase().trim() == "intel" ||
+        secondGPU.getLine().toLowerCase().trim() === "arc"
+    ) {
+        secondGpuModelHeaderClass = "gpu-compare-header-intel";
     } else {
-        secondGPUNameHeaderClass = "gpu-compare-header";
+        secondGpuModelHeaderClass = "gpu-compare-header";
     }
 
     const compareSpecsTable = document.createElement("table");
@@ -59,22 +77,22 @@ export function createCompareSpecsContainer(firstGPU, secondGPU) {
     compareSpecsMainRow.classList.add("compare-specs-table-headers");
 
     // Creates each one of the main headers for the table
-    const gpuNameHeader = document.createElement("th");
-    gpuNameHeader.textContent = "Name";
-    gpuNameHeader.classList.add("compare-specs-table-headers");
-    const firstGPUName = document.createElement("td");
-    firstGPUName.textContent = firstGPU.getName();
-    firstGPUName.classList.add(firstGPUNameHeaderClass);
-    const secondGPUName = document.createElement("td");
-    secondGPUName.textContent = secondGPU.getName();
-    secondGPUName.classList.add(secondGPUNameHeaderClass);
+    const modelHeader = document.createElement("th");
+    modelHeader.textContent = "Name";
+    modelHeader.classList.add("compare-specs-table-headers");
+    const firstModel = document.createElement("td");
+    firstModel.textContent = firstGPU.getModel();
+    firstModel.classList.add(firstGpuModelHeaderClass);
+    const secondModel = document.createElement("td");
+    secondModel.textContent = secondGPU.getModel();
+    secondModel.classList.add(secondGpuModelHeaderClass);
     const percentageDifferenceHeader = document.createElement("td");
     percentageDifferenceHeader.textContent = "Difference (in %)";
     percentageDifferenceHeader.className = "compare-specs-table-difference-column";
 
-    compareSpecsMainRow.appendChild(gpuNameHeader);
-    compareSpecsMainRow.appendChild(firstGPUName);
-    compareSpecsMainRow.appendChild(secondGPUName);
+    compareSpecsMainRow.appendChild(modelHeader);
+    compareSpecsMainRow.appendChild(firstModel);
+    compareSpecsMainRow.appendChild(secondModel);
     compareSpecsMainRow.appendChild(percentageDifferenceHeader);
     compareSpecsTable.appendChild(compareSpecsMainRow);
 
@@ -243,7 +261,7 @@ function getPercentageDifference(firstGPUValue, secondGPUValue) {
 // Support method for the createCompareSpecsContainer() function
 function getFP32PercentageDifference(firstGPU, secondGPU) {
     const getFP32 = (gpu) => {
-        return (gpu.getName().toLowerCase().includes("rx 7")) ? 
+        return (gpu.getModel().toLowerCase().includes("rx 7")) ? 
             (gpu.getCores() * gpu.getBoostClock() * 4) / 1000000 : 
             (gpu.getCores() * gpu.getBoostClock() * 2) / 1000000;
     };

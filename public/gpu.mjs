@@ -1,7 +1,7 @@
 export class GPU {
     #manufacturer;
-    #gpuline;
-    #gpuname;
+    #line;
+    #model;
     #cores;
     #tmus;
     #rops;
@@ -12,10 +12,10 @@ export class GPU {
     #boostclock;
     #memclock;
 
-    constructor(manufacturer, gpuline, gpuname, cores, tmus, rops, vram, bus, memtype, baseclock, boostclock, memclock) {
+    constructor(manufacturer, line, model, cores, tmus, rops, vram, bus, memtype, baseclock, boostclock, memclock) {
         this.#manufacturer = manufacturer;
-        this.#gpuline = gpuline;
-        this.#gpuname = gpuname;
+        this.#line = line;
+        this.#model = model;
         this.#cores = cores;
         this.#tmus = tmus;
         this.#rops = rops;
@@ -32,11 +32,11 @@ export class GPU {
     }
 
     getLine() {
-        return this.#gpuline;
+        return this.#line;
     }
 
-    getName() {
-        return this.#gpuname;
+    getModel() {
+        return this.#model;
     }
 
     getCores() {
@@ -77,7 +77,10 @@ export class GPU {
 
     calculateFP32(coreClock) {
         let fp32Performance = 0;
-        if (this.getName().toLowerCase().includes("rx 7")) {
+        if (
+            this.getModel().toLowerCase().includes("rx 7") ||
+            this.getModel().toLowerCase().includes("rx 9")
+        ) {
             fp32Performance = ((this.getCores() * coreClock * 4) / 1000000).toFixed(2);
         } else {
             fp32Performance = ((this.getCores() * coreClock * 2) / 1000000).toFixed(2);
