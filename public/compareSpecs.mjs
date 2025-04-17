@@ -33,17 +33,17 @@ export function createCompareSpecsContainer(firstGPU, secondGPU) {
         firstGPU.getManufacturer().toLowerCase().trim() === "nvidia" ||
         firstGPU.getLine().toLowerCase().trim() === "geforce"
     ) {
-        firstGpuModelHeaderClass = "gpu-compare-header-nvidia";
+        firstGpuModelHeaderClass = "gpu-compare-nvidia";
     } else if (
         firstGPU.getManufacturer().toLowerCase().trim() == "amd" ||
         firstGPU.getLine().toLowerCase().trim() === "radeon"
     ) {
-        firstGpuModelHeaderClass = "gpu-compare-header-amd";
+        firstGpuModelHeaderClass = "gpu-compare-amd";
     } else if (
         firstGPU.getManufacturer().toLowerCase().trim() == "intel" ||
         firstGPU.getLine().toLowerCase().trim() === "arc"
     ) {
-        firstGpuModelHeaderClass = "gpu-compare-header-intel";
+        firstGpuModelHeaderClass = "gpu-compare-intel";
     } else {
         firstGpuModelHeaderClass = "gpu-compare-header";
     }
@@ -54,17 +54,17 @@ export function createCompareSpecsContainer(firstGPU, secondGPU) {
         secondGPU.getManufacturer().toLowerCase().trim() == "nvidia" ||
         secondGPU.getLine().toLowerCase().trim() === "geforce"
     ) {
-        secondGpuModelHeaderClass = "gpu-compare-header-nvidia";
+        secondGpuModelHeaderClass = "gpu-compare-nvidia";
     } else if (
         secondGPU.getManufacturer().toLowerCase().trim() == "amd" ||
         secondGPU.getLine().toLowerCase().trim() === "radeon"
     ) {
-        secondGpuModelHeaderClass = "gpu-compare-header-amd";
+        secondGpuModelHeaderClass = "gpu-compare-amd";
     } else if (
         secondGPU.getManufacturer().toLowerCase().trim() == "intel" ||
         secondGPU.getLine().toLowerCase().trim() === "arc"
     ) {
-        secondGpuModelHeaderClass = "gpu-compare-header-intel";
+        secondGpuModelHeaderClass = "gpu-compare-intel";
     } else {
         secondGpuModelHeaderClass = "gpu-compare-header";
     }

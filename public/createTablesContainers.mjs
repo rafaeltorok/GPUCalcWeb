@@ -1,25 +1,24 @@
 export function createGPUContainer(gpu, coreClock, memClock) {
     const gpuContainer = document.createElement("div");
-    gpuContainer.className = "gpu-container";
-
     const gpuModelHeader = document.createElement("h2");
+    
     if (
         gpu.getManufacturer().toLowerCase().trim() == "nvidia" ||
         gpu.getLine().toLowerCase().trim() == "geforce"
     ) {
-        gpuModelHeader.className = "model-header-nvidia";
+        gpuContainer.classList.add("gpu-container", "model-nvidia");
     } else if (
         gpu.getManufacturer().toLowerCase().trim() == "amd" ||
         gpu.getLine().toLowerCase().trim() == "radeon"
     ) {
-        gpuModelHeader.className = "model-header-amd";
+        gpuContainer.classList.add("gpu-container", "model-amd");
     } else if (
         gpu.getManufacturer().toLowerCase().trim() == "intel" ||
         gpu.getLine().toLowerCase().trim() == "arc"
     ) {
-        gpuModelHeader.className = "model-header-intel";
+        gpuContainer.classList.add("gpu-container", "model-intel");
     } else {
-        gpuModelHeader.className = "model-header";
+        gpuContainer.classList.add("gpu-container");
     }
     gpuModelHeader.textContent = gpu.getManufacturer() + " " + gpu.getLine() + " " + gpu.getModel();
 
@@ -44,11 +43,11 @@ function createGraphicsCardTable(gpu) {
     const header = createTableHeader("GRAPHICS CARD");
     const body = document.createElement("tbody");
     body.innerHTML = `
-        <tr><td>Cores:</td><td>${gpu.getCores()}</td></tr>
-        <tr><td>TMUs:</td><td>${gpu.getTmus()}</td></tr>
-        <tr><td>ROPs:</td><td>${gpu.getRops()}</td></tr>
-        <tr><td>VRAM:</td><td>${gpu.getVram()} GB ${gpu.getMemType()}</td></tr>
-        <tr><td>Bus Width:</td><td>${gpu.getBus()} bit</td></tr>
+        <tr><th>Cores:</td><td>${gpu.getCores()}</td></tr>
+        <tr><th>TMUs:</td><td>${gpu.getTmus()}</td></tr>
+        <tr><th>ROPs:</td><td>${gpu.getRops()}</td></tr>
+        <tr><th>VRAM:</td><td>${gpu.getVram()} GB ${gpu.getMemType()}</td></tr>
+        <tr><th>Bus Width:</td><td>${gpu.getBus()} bit</td></tr>
     `;
 
     table.appendChild(header);
@@ -64,9 +63,9 @@ function createClockSpeedsTable(gpu, coreClock, memClock) {
     const header = createTableHeader("CLOCK SPEEDS");
     const body = document.createElement("tbody");
     body.innerHTML = `
-        <tr><td>Base Clock:</td><td>${gpu.getBaseClock()} MHz</td></tr>
-        <tr><td>Boost Clock:</td><td>${coreClock} MHz</td></tr>
-        <tr><td>Memory Clock:</td><td>${memClock} Gbps effective</td></tr>
+        <tr><th>Base Clock:</td><td>${gpu.getBaseClock()} MHz</td></tr>
+        <tr><th>Boost Clock:</td><td>${coreClock} MHz</td></tr>
+        <tr><th>Memory Clock:</td><td>${memClock} Gbps effective</td></tr>
     `;
 
     table.appendChild(header);
@@ -81,10 +80,10 @@ function createPerformanceTable(gpu, coreClock, memClock) {
     const header = createTableHeader("THEORETICAL PERFORMANCE");
     const body = document.createElement("tbody");
     body.innerHTML = `
-        <tr><td>FP32 (float):</td><td>${gpu.calculateFP32(coreClock)}</td></tr>
-        <tr><td>Texture Rate:</td><td>${gpu.calculateTextureRate(coreClock)} GTexel/s</td></tr>
-        <tr><td>Pixel Rate:</td><td>${gpu.calculatePixelRate(coreClock)} GPixel/s</td></tr>
-        <tr><td>Bandwidth:</td><td>${gpu.calculateBandwidth(memClock)} GB/s</td></tr>
+        <tr><th>FP32 (float):</td><td>${gpu.calculateFP32(coreClock)}</td></tr>
+        <tr><th>Texture Rate:</td><td>${gpu.calculateTextureRate(coreClock)} GTexel/s</td></tr>
+        <tr><th>Pixel Rate:</td><td>${gpu.calculatePixelRate(coreClock)} GPixel/s</td></tr>
+        <tr><th>Bandwidth:</td><td>${gpu.calculateBandwidth(memClock)} GB/s</td></tr>
     `;
 
     table.appendChild(header);

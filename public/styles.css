@@ -43,27 +43,39 @@ input {
 }
 
 /* Style for the GPU name header */ 
-.model-header-nvidia, 
-.model-header-amd, 
-.model-header-intel, 
-.model-header {
+.gpu-container > h2 {
     text-align: center;
     font-size: 30px;
     margin-bottom: 15px;
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100%;
     display: block;
+    background-color: black;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
 }
 
-.model-header-nvidia {
+.gpu-container th {
+    background-color: #121212;
+}
+
+.gpu-container td {
+    background-color: black;
+    font-weight: bold;
+}
+
+.model-nvidia > h2,
+.model-nvidia td {
     color: #76b900;
 }
 
-.model-header-amd {
+.model-amd > h2,
+.model-amd td {
     color: red;
 }
 
-.model-header-intel {
+.model-intel > h2,
+.model-intel td {
     color: #0068B5;
 }
 
@@ -100,24 +112,24 @@ th {
 }
 
 .gpu-compare-header,
-.gpu-compare-header-amd,
-.gpu-compare-header-intel,
-.gpu-compare-header-nvidia {
+.gpu-compare-amd,
+.gpu-compare-intel,
+.gpu-compare-nvidia {
     background-color: #050505;
     font-size: 26px;
     font-weight: bold;
     padding: 20px;
 }
 
-.gpu-compare-header-nvidia {
+.gpu-compare-nvidia {
     color: #76b900;
 }
 
-.gpu-compare-header-amd {
+.gpu-compare-amd {
     color: red;
 }
 
-.gpu-compare-header-intel {
+.gpu-compare-intel {
     color: #0068B5;
 }
 
