@@ -253,22 +253,29 @@ function createTableRow(
 
 // Support method for the createCompareSpecsContainer() function
 function getPercentageDifference(firstGPUValue, secondGPUValue) {
-    const percentageDifference = ((firstGPUValue / secondGPUValue) * 100) - 100;
-    return percentageDifference > 0 ? `+${percentageDifference.toFixed()}%` : `${percentageDifference.toFixed()}%`;
-}
+    if (!firstGPUValue || firstGPUValue === 0) return 'N/A';
 
+    const difference = ((secondGPUValue - firstGPUValue) / firstGPUValue) * 100;
+    const rounded = difference.toFixed();
+
+    return difference > 0 ? `+${rounded}%` : `${rounded}%`;
+}
 
 // Support method for the createCompareSpecsContainer() function
 function getFP32PercentageDifference(firstGPU, secondGPU) {
     const getFP32 = (gpu) => {
-        return (gpu.getModel().toLowerCase().includes("rx 7")) ? 
-            (gpu.getCores() * gpu.getBoostClock() * 4) / 1000000 : 
-            (gpu.getCores() * gpu.getBoostClock() * 2) / 1000000;
+        const model = gpu.getModel().toLowerCase();
+        const isRadeon = model.includes("rx 7") || model.includes("rx 9");
+        const multiplier = isRadeon ? 4 : 2;
+
+        return (gpu.getCores() * gpu.getBoostClock() * multiplier) / 1_000_000;
     };
 
-    const firstFP32Performance = getFP32(firstGPU);
-    const secondFP32Performance = getFP32(secondGPU);
-    
-    const percentageDifference = ((firstFP32Performance / secondFP32Performance) * 100) - 100;
-    return percentageDifference > 0 ? `+${percentageDifference.toFixed()}%` : `${percentageDifference.toFixed()}%`;
+    const firstFP32 = getFP32(firstGPU);
+    const secondFP32 = getFP32(secondGPU);
+
+    const difference = ((secondFP32 - firstFP32) / firstFP32) * 100;
+
+    const rounded = difference.toFixed();
+    return difference > 0 ? `+${rounded}%` : `${rounded}%`;
 }
