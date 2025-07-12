@@ -4,7 +4,8 @@ const app = express();
 const port = 3000;
 const filename = './gpuData.json';
 
-app.use(express.static('public'));
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
 // Middleware to parse JSON body
 app.use(express.json());
 
